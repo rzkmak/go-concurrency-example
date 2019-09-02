@@ -3,16 +3,10 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/aeidelos/go-concurrency/domain"
 	"io/ioutil"
 	"net/http"
 )
-
-type Todo struct {
-	UserId    int    `json:"userId"`
-	Id        int    `json:"id"`
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
-}
 
 func main() {
 	fmt.Println("Starting the application")
@@ -32,7 +26,7 @@ func main() {
 		panic("error parsing")
 	}
 	fmt.Println(string(result))
-	todo := Todo{}
+	todo := domain.Todo{}
 	errMar := json.Unmarshal(result, &todo)
 	if errMar != nil {
 		panic("error unmarshal json")
