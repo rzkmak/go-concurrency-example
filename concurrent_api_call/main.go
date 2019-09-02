@@ -13,7 +13,7 @@ import (
 func main() {
 	var todo [] domain.Todo
 	var wg sync.WaitGroup
-	for i := 1; i < 5; i++ {
+	for i := 1; i < 100; i++ {
 		wg.Add(1)
 		go func(id int) {
 			result := domain.Todo{}
