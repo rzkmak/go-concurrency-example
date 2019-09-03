@@ -12,15 +12,13 @@ func main() {
 	todoChannel := make(chan domain.Todo)
 	var todo domain.Todo
 	go func() {
-		result := domain.Todo{}
-		CallApiConcurrent("https://jsonplaceholder.typicode.com/todos/1", &result)
-		todoChannel <- result
+		CallApiConcurrent("https://jsonplaceholder.typicode.com/todos/1", todoChannel)
 	}()
 	todo = <- todoChannel
 	fmt.Println(todo)
 }
 
-func CallApiConcurrent(url string, data interface{}) {
+func CallApiConcurrent(url string, ch chan<- domain.Todo) {
 	fmt.Println("Starting api call on " + url)
 	response, err := http.Get(url)
 	if err != nil {
@@ -38,8 +36,10 @@ func CallApiConcurrent(url string, data interface{}) {
 		panic("error parsing")
 	}
 	fmt.Println(string(result))
+	var data domain.Todo
 	errMar := json.Unmarshal(result, &data)
 	if errMar != nil {
 		panic("error unmarshal json")
 	}
+	ch <- data
 }
