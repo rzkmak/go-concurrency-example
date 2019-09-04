@@ -11,13 +11,14 @@ import (
 )
 
 func main() {
-	jobs := make(chan string, 10)
-	done := make(chan bool, 10)
+	jobs := make(chan string, 100)
+	done := make(chan bool, 100)
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGINT, syscall.SIGKILL, syscall.SIGQUIT, syscall.SIGSTOP)
 
 	go func() {
 		<-c
+		close(jobs)
 		log.Println("terminate service")
 		os.Exit(0)
 	}()
